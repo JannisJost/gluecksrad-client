@@ -1,0 +1,41 @@
+<div class="w-full h-full font-bold flex flex-col justify-center items-center">
+    <p class="text-8xl">Game over</p>
+    <p class="text-4xl mb-8">Seems like you went game over</p>
+    <div class="pl-20 pr-20 pt-2 pb-2 bg-neutral-600 rounded flex flex-col justify-center items-center">
+        <div class="font-normal">
+            <p class="text-4xl ">Stats</p>
+            <p class="mt-2 text-2xl font-bold">Rounds:</p>
+            <p>{{game.rounds}}</p>
+            <p class="mt-2 text-2xl font-bold">Balance:</p>
+            <p>{{game.balance}}</p>
+            <p class="mt-2 text-2xl font-bold">Category:</p>
+            <p>{{game.category.name}}</p>
+            <p class="mt-2 text-2xl font-bold">All words:</p>
+            <p>{{game.words}}</p>
+        </div>
+    </div>
+    <form [formGroup]="gamesaveform" #savestudent (ngSubmit)="saveGame()" class="mt-8">
+        <div class="form-group">
+            <label for="name" class="font-bold text-lg">Add a player name to save the game:</label>
+            <input type="text" placeholder="Your Player Name"
+                class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none"
+                formControlName="player_name" data-toggle="tooltip" data-placement="right" title="Enter Name">
+            <div class="text-red-400" *ngIf="(PlayerName && PlayerName.touched) && (PlayerName.invalid)"
+                style="margin-top: 5px;">
+                <span *ngIf="(PlayerName.errors && PlayerName.errors['required'])">Player Name is
+                    Required</span>
+                <span *ngIf="(PlayerName.errors && PlayerName.errors['minlength'])">
+                    Name too short!
+                </span>
+            </div>
+            <div class="flex flex-row justify-end">
+                <button type="submit"
+                    class="bg-yellow-500 mt-6 mb-6 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Save
+                    Game</button>
+            </div>
+
+        </div>
+    </form>
+    <button class="text-yellow-500 ml-2 mt-6 mb-6 hover:text-yellow-700 font-bold py-2 px-4 rounded"
+        (click)="cancelSaveGame()">Cancel</button>
+</div>

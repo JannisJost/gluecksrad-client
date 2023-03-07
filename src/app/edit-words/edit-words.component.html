@@ -1,0 +1,38 @@
+<p class="text-7xl">Words</p>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <p for="name" class="font-bold text-lg">Add Word:</p>
+        <p>Category:</p>
+        <select [(ngModel)]="selectedCategory" name="category" required class="bg-yellow-500 w-full h-10">
+            <option *ngFor="let category of categories | async" [ngValue]="category">{{"("+category.id +") "
+                +category.name }}</option>
+        </select>
+        <p>Word:</p>
+        <form [formGroup]="playersaveform" #savestudent (ngSubmit)="saveWord()">
+            <div class="form-group">
+
+                <input type="text" placeholder="New word"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none"
+                    formControlName="word_value" data-toggle="tooltip" data-placement="right" title="Enter Word">
+                <div class="text-red-400" *ngIf="(WordValue && WordValue.touched) && (WordValue.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(WordValue.errors && WordValue.errors['required'])">Word is
+                        Required</span>
+                    <span *ngIf="(WordValue.errors && WordValue.errors['minlength'])">
+                        Word too short!
+                    </span>
+                </div>
+            </div>
+            <button type="submit"
+                class="bg-yellow-500 mt-6 mb-6 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Add
+                Word</button>
+        </form>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+<div class="w-full rounded flex flex-col gap-2 text-center items-center">
+    <div *ngFor="let word of words | async">
+        <app-word-entry [word]="word" [categories]="categories"></app-word-entry>
+    </div>
+</div>

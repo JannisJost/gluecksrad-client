@@ -1,0 +1,39 @@
+<p class="text-7xl">Login</p>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <form [formGroup]="loginform" #savestudent (ngSubmit)="tryLogin()">
+            <div class="form-group">
+                <label for="name" class="font-bold text-lg">Login as an admin:</label>
+                <input type="text" placeholder="Username"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none"
+                    formControlName="login_username" data-toggle="tooltip" data-placement="right"
+                    title="Enter Username">
+                <div class="text-red-400" *ngIf="(UsernameValue && UsernameValue.touched) && (UsernameValue.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(UsernameValue.errors && UsernameValue.errors['required'])">Word is
+                        Required</span>
+                    <span *ngIf="(UsernameValue.errors && UsernameValue.errors['minlength'])">
+                        Word too short!
+                    </span>
+                </div>
+                <input type="password" placeholder="Password"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none"
+                    formControlName="login_password" data-toggle="tooltip" data-placement="right"
+                    title="Enter Password">
+                <div class="text-red-400" *ngIf="(UsernameValue && UsernameValue.touched) && (UsernameValue.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(UsernameValue.errors && UsernameValue.errors['required'])">Word is
+                        Required</span>
+                    <span *ngIf="(UsernameValue.errors && UsernameValue.errors['minlength'])">
+                        Word too short!
+                    </span>
+                </div>
+            </div>
+            <button type="submit"
+                class="bg-yellow-500 mt-6 mb-6 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Login
+            </button>
+        </form>
+    </div>
+    <div class="col-sm-4"></div>
+</div>

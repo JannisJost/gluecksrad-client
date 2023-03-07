@@ -1,0 +1,31 @@
+<p class="text-7xl">Categories</p>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <form [formGroup]="categorysaveform" #savestudent (ngSubmit)="saveCategory()">
+            <div class="form-group">
+                <label for="name" class="font-bold text-lg">Add Category:</label>
+                <input type="text" placeholder="Category Name"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none"
+                    formControlName="category_name" data-toggle="tooltip" data-placement="right" title="Enter Category">
+                <div class="text-red-400" *ngIf="(CategoryName && CategoryName.touched) && (CategoryName.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(CategoryName.errors && CategoryName.errors['required'])">Name is
+                        Required</span>
+                    <span *ngIf="(CategoryName.errors && CategoryName.errors['minlength'])">
+                        Name too short!
+                    </span>
+                </div>
+            </div>
+            <button type="submit"
+                class="bg-yellow-500 mt-6 mb-6 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Add
+                Category</button>
+        </form>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+<div class="w-full rounded flex flex-col gap-2 text-center items-center">
+    <div *ngFor="let category of categories | async">
+        <app-category-entry [category]="category"></app-category-entry>
+    </div>
+</div>

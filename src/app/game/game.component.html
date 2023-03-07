@@ -1,0 +1,127 @@
+<div *ngIf="!currentGame.value.gameover; else gameover">
+    <div class="z-50 h-full w-full flex absolute justify-center items-center" [hidden]="!showInfo">
+        <div class="w-full h-2/5 flex justify-center items-center" [ngClass]="goodInfo? 'bg-green-500':'bg-red-500'">
+            <span class="text-8xl font-bold">{{infoMessage}}</span>
+        </div>
+    </div>
+
+    <div>
+        <div class="flex justify-end items-center w-full font-bold gap-2 mt-2 mb-2">
+            <span>Rounds: {{currentGame.value.rounds}}</span>
+            <button (click)="newGame()" class="bg-yellow-500 p-2 rounded mr-6">New Game</button>
+            <span>Category:</span>
+            <span class="mr-6">{{currentGame.value.category.name}}</span>
+            <span>Lives:</span>
+            <img *ngFor="let item of [].constructor(currentGame.value.lives); let i = index"
+                src="assets/images/heart.png" class="h-6">
+            <span class="ml-6">Coins: {{currentGame.value.balance}}</span>
+            <img src="assets/images/coins.png" class="h-6 ml-2 mr-4">
+        </div>
+        <div class="w-full h-20 flex justify-center">
+            <div class="h-full w-80 border-2 border-yellow-500 rounded justify-center flex items-center text-2xl font-bold"
+                [ngClass]="currentGame.value.spin ? 'animate-pulse' :'' ">
+                <span>{{currentGame.value.spin ?"Spin the wheel!": currentGame.value.needToAnswerQuestion ? "Question"
+                    :"+"
+                    +currentGame.value.nextAction}}</span>
+            </div>
+        </div>
+        <div *ngFor="let word of currentGame.value.words" class="h-36 m-3 bg-neutral-600 rounded">
+            <div *ngIf="word" class="flex flex-row gap-2 h-36">
+                <div *ngFor="let character of wordhelper.getCharsOfString(word)"
+                    class="h-36 w-36 text-center flex items-center ">
+                    <div *ngIf="currentGame.value.guessedChars.includes(character); else questionMark"
+                        class="w-full h-full bg-green-600 flex items-center">
+                        <span class="text-8xl w-full">{{character}}</span>
+                    </div>
+                    <ng-template #questionMark>
+                        <div class="h-full w-full bg-neutral-500 flex items-center">
+                            <span class="text-8xl w-full bg-neutral-500">?</span>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!currentGame.value.needToAnswerQuestion; else questionField">
+        <span class="font-bold">{{currentGame.value.vowelShopping?"Buy vowel for 200?":"Available consonants:"}}</span>
+        <div *ngIf="currentGame.value.spin; else letterSelect" class="h-fit w-full flex justify-center">
+            <button (click)="spin()" class="rounded bg-yellow-500 h-36 w-56 text-2xl">Spin wheel</button>
+        </div>
+        <ng-template #letterSelect>
+            <div class="flex flex-row gap-2 m-2">
+                <div *ngIf="!currentGame.value.vowelShopping; else vowelSelect" class="flex flex-row gap-2 m-2">
+                    <div *ngFor="let letter of consonants"
+                        class="h-10 w-10 bg-yellow-800 rounded text-center justify-items-start">
+                        <div *ngIf="!currentGame.value.guessedChars.includes(letter); else disableButton"
+                            class="h-full w-full bg-yellow-500 rounded hover:cursor-pointer transition-transform duration-300 hover:scale-110">
+                            <button (click)="guessChar(letter)" class="w-full h-full">
+                                <span> {{this.letter}}</span>
+                            </button>
+                        </div>
+                        <ng-template #disableButton>
+                            <div class="h-full w-full rounded">
+                                <span>{{letter}}</span>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+                <ng-template #vowelSelect>
+                    <div *ngFor="let vowel of vowels"
+                        class="h-10 w-10 bg-yellow-800 rounded text-center justify-items-start">
+                        <div *ngIf="!currentGame.value.guessedChars.includes(vowel); else disableButton"
+                            class="h-full w-full bg-yellow-500 rounded hover:cursor-pointer transition-transform duration-300 hover:scale-110">
+                            <button (click)="guessChar(vowel)" class="w-full h-full">
+                                <span> {{this.vowel}}</span>
+                            </button>
+                        </div>
+                        <ng-template #disableButton>
+                            <div class="h-full w-full rounded">
+                                <span>{{vowel}}</span>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <button (click)="skipVowelShopping()"
+                        class="h-10 w-48 bg-yellow-500 rounded hover:cursor-pointer transition-transform duration-300 hover:scale-105">Skip</button>
+                </ng-template>
+            </div>
+        </ng-template>
+    </div>
+
+    <ng-template #questionField>
+        <span class="text-xl">Question</span>
+        <div *ngIf="currentGame.value.questionAmount < 0; else questionBlock"
+            class="flex flex-row justify-center gap-2">
+            <div *ngFor="let amount of betableAmounts">
+                <button *ngIf="amount <= currentGame.value.balance" class="w-48 h-16 rounded bg-yellow-500"
+                    (click)="setQuestionAmount(amount)">
+                    {{amount}}
+                </button>
+            </div>
+
+        </div>
+        <ng-template #questionBlock>
+            <div class="text-center w-full">
+                <p>Amount: {{currentGame.value.questionAmount}}</p>
+                <span class="text-2xl text-center">{{currentGame.value.question.question}}</span>
+            </div>
+            <div class="flex w-full gap-4 justify-center">
+                <button class="bg-yellow-500 h-16 w-64 rounded"
+                    (click)="answerQuestion(questionAlignment ? currentGame.value.question.rightAnswer: currentGame.value.question.wrongAnswer)">
+                    {{questionAlignment ? currentGame.value.question.rightAnswer:
+                    currentGame.value.question.wrongAnswer}}
+                </button>
+                <button class="bg-yellow-500 h-16 w-64 rounded"
+                    (click)="answerQuestion(questionAlignment ? currentGame.value.question.wrongAnswer: currentGame.value.question.rightAnswer)">
+                    {{questionAlignment ? currentGame.value.question.wrongAnswer:
+                    currentGame.value.question.rightAnswer}}
+                </button>
+            </div>
+        </ng-template>
+
+    </ng-template>
+</div>
+<ng-template #gameover>
+    <div class="min-h-full">
+        <app-gameover class="h-full" [game]="currentGame.value"></app-gameover>
+    </div>
+</ng-template>

@@ -1,0 +1,5 @@
+<div class="m-4">
+    <div *ngFor="let record of gameRecords |async" class="flex flex-col">
+        <app-leaderboard-entry [gamerecord]="record" class="m-1"></app-leaderboard-entry>
+    </div>
+</div>

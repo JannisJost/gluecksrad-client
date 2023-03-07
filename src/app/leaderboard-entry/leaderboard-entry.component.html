@@ -1,0 +1,15 @@
+<div *ngIf="!deleted" class="p-2 w-full flex flex-row gap-2 border-2 border-yellow-400 rounded items-center">
+    <div class="row w-full">
+        <div class="col-sm-3 flex justify-center">
+            <span class="text-center">{{gamerecord.playername}}</span>
+        </div>
+        <div class="col-sm-3 flex justify-center">{{"Balance: "+gamerecord.balance}}</div>
+        <div class="col-sm-3 flex justify-center">
+            {{"Time: " +gamerecord.dateAndTime}}
+        </div>
+        <div class="col-sm-3 flex justify-end">
+            <button *ngIf="authService.isAdmin" class="bg-red-500 h-full rounded p-2"
+                (click)="deleteRecord()">Delete</button>
+        </div>
+    </div>
+</div>

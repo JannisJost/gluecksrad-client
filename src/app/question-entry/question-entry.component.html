@@ -1,0 +1,63 @@
+<div class="p-2 w-96 flex flex-row gap-2 border-2 border-yellow-400 rounded items-center" [hidden]="deleted">
+    <div *ngIf="!editMode; else questionEdit" class="flex flex-row gap-2 items-center">
+        <span class="text-center">{{"(" + question.category.name + ") " + question.question}} </span>
+        <span class="text-green-500">{{question.rightAnswer}} : </span>
+        <span class="text-red-500">{{question.wrongAnswer}}</span>
+        <button class="bg-yellow-500 h-full rounded p-2" (click)="switchMode()">Edit</button>
+        <button class="bg-red-500 h-full rounded p-2" (click)="deleteWord()">Delete</button>
+    </div>
+
+    <ng-template #questionEdit class="flex flex-col">
+        <select [(ngModel)]="selectedCategory" name="category" required class="bg-yellow-500 w-full h-10">
+            <option *ngFor="let category of categories | async" [ngValue]="category">{{ category.name }}</option>
+        </select>
+        <form [formGroup]="questionsaveform" #savestudent (ngSubmit)="saveWord()">
+            <div class="form-group">
+                <label for="name" class="font-bold text-lg">Edit Question:</label>
+                <input type="text" placeholder="Question"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none"
+                    formControlName="question_value" data-toggle="tooltip" data-placement="right"
+                    title="Enter Question">
+                <div class="text-red-400" *ngIf="(QuestionValue && QuestionValue.touched) && (QuestionValue.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(QuestionValue.errors && QuestionValue.errors['required'])">Question is
+                        Required</span>
+                    <span *ngIf="(QuestionValue.errors && QuestionValue.errors['minlength'])">
+                        Question too short!
+                    </span>
+                </div>
+
+                <input type="text" placeholder="Right Answer"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none text-green-500"
+                    formControlName="right_answer" data-toggle="tooltip" data-placement="right"
+                    title="Enter Right Answer">
+                <div class="text-red-400"
+                    *ngIf="(QuestionRightAnswer && QuestionRightAnswer.touched) && (QuestionRightAnswer.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(QuestionRightAnswer.errors && QuestionRightAnswer.errors['required'])">Right Answer is
+                        Required</span>
+                    <span *ngIf="(QuestionRightAnswer.errors && QuestionRightAnswer.errors['minlength'])">
+                        Right Answer too short!
+                    </span>
+                </div>
+
+                <input type="text" placeholder="Wrong Answer"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none text-red-500"
+                    formControlName="wrong_answer" data-toggle="tooltip" data-placement="right"
+                    title="Enter Wrong Answer">
+                <div class="text-red-400"
+                    *ngIf="(QuestionWrongAnswer && QuestionWrongAnswer.touched) && (QuestionWrongAnswer.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(QuestionWrongAnswer.errors && QuestionWrongAnswer.errors['required'])">Wrong Answer is
+                        Required</span>
+                    <span *ngIf="(QuestionWrongAnswer.errors && QuestionWrongAnswer.errors['minlength'])">
+                        Wrong Answer too short!
+                    </span>
+                </div>
+            </div>
+            <button type="submit"
+                class="bg-yellow-500 mt-6 mb-6 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Save</button>
+        </form>
+    </ng-template>
+
+</div>

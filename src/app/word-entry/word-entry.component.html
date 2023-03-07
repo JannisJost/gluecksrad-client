@@ -1,0 +1,32 @@
+<div class="p-2 w-80 flex flex-row gap-2 border-2 border-yellow-400 rounded items-center" [hidden]="deleted">
+    <div *ngIf="!editMode; else wordEdit" class="flex flex-row gap-2 items-center">
+        <span class="text-center">{{"(" + word.category.name +") " + word.word}} </span>
+        <button class="bg-yellow-500 h-full rounded p-2" (click)="switchMode()">Edit</button>
+        <button class="bg-red-500 h-full rounded p-2" (click)="deleteWord()">Delete</button>
+    </div>
+
+    <ng-template #wordEdit>
+        <select [(ngModel)]="selectedCategory" name="category" required class="bg-yellow-500 w-full h-10">
+            <option *ngFor="let category of categories | async" [ngValue]="category">{{ category.name }}</option>
+        </select>
+        <form [formGroup]="wordsaveform" #savestudent (ngSubmit)="saveWord()">
+            <div class="form-group">
+                <label for="name" class="font-bold text-lg">Edit Word:</label>
+                <input type="text" placeholder="New word"
+                    class="peer h-10 w-full border-b border-yellow-500 border-t-transparent bg-transparent outline-none"
+                    formControlName="word_value" data-toggle="tooltip" data-placement="right" title="Enter Word">
+                <div class="text-red-400" *ngIf="(WordValue && WordValue.touched) && (WordValue.invalid)"
+                    style="margin-top: 5px;">
+                    <span *ngIf="(WordValue.errors && WordValue.errors['required'])">Word is
+                        Required</span>
+                    <span *ngIf="(WordValue.errors && WordValue.errors['minlength'])">
+                        Word too short!
+                    </span>
+                </div>
+            </div>
+            <button type="submit"
+                class="bg-yellow-500 mt-6 mb-6 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Save</button>
+        </form>
+    </ng-template>
+
+</div>
